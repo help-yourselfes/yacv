@@ -1,0 +1,32 @@
+# Node
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.vite/
+
+# Backend
+/backend/node_modules/
+/backend/dist/
+/backend/.output/
+
+# Shared (если собирается)
+# /shared/dist/
+
+# IDE
+.idea/
+.vscode/
