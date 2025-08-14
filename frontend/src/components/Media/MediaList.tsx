@@ -1,4 +1,4 @@
-import type { MediaData } from "../../logic/api/types";
+import type { MediaData } from "../../../../shared/types";
 import MediaPreview from "./MediaPreview";
 
 interface MediaListProps {
@@ -9,7 +9,7 @@ const MediaList: React.FC<MediaListProps> = ({ list }) => {
 
     return (<div>
         {list.map(media =>
-            <MediaPreview key={media.timestamp}media={media} />
+            <MediaPreview key={media.timestamp} media={media} />
         )}
     </div>)
 }

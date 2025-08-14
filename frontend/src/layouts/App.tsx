@@ -12,14 +12,7 @@ import ThreadPage from '../pages/ThreadPage';
 import ErrorPage from '../pages/ErrorPage';
 
 function App() {
-  const { sites, update } = useSiteStore();
-
-  useEffect(() => {
-    update();
-  }, [update]);
-
-
-
+  
   return (
     <Router>
       <Layout>

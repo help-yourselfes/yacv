@@ -1,5 +1,5 @@
 import type React from "react";
-import type { BoardData } from "../../logic/api/types";
+import type { BoardData } from "../../../../shared/types";
 
 interface BoardButtonProps {
     selected: boolean;
@@ -7,9 +7,10 @@ interface BoardButtonProps {
 }
 
 const BoardButton: React.FC<BoardButtonProps> = ({selected, board}) => {
+
     return (
         <li>
-            <a href={`/view/${board.id}`}>
+            <a className={selected ? 'selected' : ''} href={`/view/${board.id}`}>
             {board.id}
             </a>
         </li>

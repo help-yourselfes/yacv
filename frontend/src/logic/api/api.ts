@@ -1,62 +1,111 @@
 import boardStore from "../stores/BoardStore";
 import replyStore from "../stores/ReplyStore";
 import threadStore from "../stores/ThreadStore";
-import type { BoardData, MediaData, ReplyData, ThreadData } from "./types";
+import siteStore from "../stores/SiteStore"
+import type { BoardData, MediaData, ReplyData, SiteData, ThreadData } from "../../../../shared/types";
 
 export const api = {
-    siteUrl: "4chan.org",
-    updateSite(url: string) {
-        this.siteUrl = url;
+    siteId: "offline",
+    apiFetch: '/api/fetch/offline',
+    updateSite(id: string) {
+        console.log('update site')
+        this.siteId = id;
+        this.apiFetch = `/api/fetch/${this.siteId}`
     },
 
     async fetchSites() {
-        return {
-            ok: true,
-            data: [
-                { url: '4chan.org', description: '4chan' }
-            ]
+        console.log('fetch sites')
+        try {
+            const response = await fetch('/api/sites');
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+            const data = await response.json();
+            const sites: SiteData[] = data.sites;
+            console.log(sites)
+            siteStore.setState({
+                list: Object.fromEntries(
+                    sites.map(s => [s.id, s])
+                ),
+                order: Array.from(
+                    sites.map(b => b.id)
+                ),
+                currentId: sites[0].id
+            })
+
+        } catch (error) {
+            console.error('Error fetching sites:', error);
+        }
+    },
+    async fetchBoards() {
+        
+        console.log('fetch boards')
+        try {
+            const response = await fetch(this.apiFetch+'/boards'); // Adjust the URL if needed
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+
+            const data = await response.json();
+            const boards: BoardData[] = data.boards; // Assuming the response structure is { boards: [...] }
+
+            boardStore.setState({
+                list: Object.fromEntries(
+                    boards.map(b => [b.id, b])
+                ),
+                order: Array.from(
+                    boards.map(b => b.id)
+                )
+            });
+        } catch (error) {
+            console.error('Error fetching boards:', error);
         }
     },
 
-    async fetchBoards() {
-        const boards = [{ id: 'b' }, { id: 'a' }]
-        boardStore.setState({
-            list: Object.fromEntries(
-                boards.map(b => [b.id, b])
-            ),
-            order: Array.from(
-                boards.map(b => b.id)
-            )
-        });
+    async fetchThreads(boardId: string) {
+        console.log('fetch threads')
+        try {
+            const response = await fetch(`${this.apiFetch}/view/${boardId}`); // Adjust the URL if needed
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
+            }
+
+            const data = await response.json();
+            const threads: ThreadData[] = data.threads; // Assuming the response structure is { threads: [...] }
+
+            threadStore.setState({
+                list: Object.fromEntries(
+                    threads.map(t => [t.id, t])
+                ),
+                order: Array.from(threads.map(t => t.id))
+            });
+        } catch (error) {
+            console.error('Error fetching threads:', error);
+        }
     },
 
-    async fetchThreads(boardId: string) {
-        const threads = [0, 1, 2, 3, 4, 5].map(i => Thread(boardId, i));
-        threadStore.setState({
-            list: Object.fromEntries(
-                threads.map(t => [t.id, t])
-            ),
-            order: Array.from(threads.map(t => t.id))
-        });
-    },
 
     async fetchReplies(boardId: string, threadId: number) {
-        const replies: ReplyData[] = [
-            {
-                id: 0,
-                text: `Hello world!
-                this is ${boardId}-board and
-                ${threadId}'s thread! :)`,
-                media: []
+        console.log('fetch replies')
+        try {
+            const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`); // Adjust the URL if needed
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.statusText);
             }
-        ];
-        replyStore.setState(state => ({
-            boardId: boardId,
-            threadId: threadId,
-            list: Object.fromEntries(replies.map(r => [r.id, r])),
-            order: Array.from(replies.map(r => r.id))
-        }));
+
+            const data = await response.json();
+            const replies: ReplyData[] = data.replies; // Assuming the response structure is { replies: [...] }
+            replyStore.setState(state => ({
+                boardId: boardId,
+                threadId: threadId,
+                list: Object.fromEntries(replies.map(r => [r.id, r])),
+                order: Array.from(replies.map(r => r.id))
+            }));
+        } catch (error) {
+            console.error('Error fetching replies:', error);
+        }
     },
+
 
     async fetchFile(url: string) {
         // ...

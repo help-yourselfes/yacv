@@ -22,6 +22,8 @@ export interface BoardData {
 }
 
 export interface SiteData {
+    id: string;
+    name: string;
     url: string;
     description: string;
 }

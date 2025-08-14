@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { BoardData } from '../api/types';
+import type { BoardData } from '../../../../shared/types';
 
 interface BoardStore {
     list: Record<string, BoardData>;

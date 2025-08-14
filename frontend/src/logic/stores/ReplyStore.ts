@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ReplyData, ThreadData } from '../api/types';
+import type { ReplyData, ThreadData } from '../../../../shared/types';
 import api from '../api/api';
 
 interface ReplyStore {

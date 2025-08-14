@@ -1,4 +1,4 @@
-import type { MediaData } from "../../logic/api/types"
+import type { MediaData } from "../../../../shared/types"
 
 interface MediaProps {
     media: MediaData;

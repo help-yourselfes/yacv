@@ -1,6 +1,5 @@
 import type React from "react";
 import type { MediaProps } from "./MediaProps";
-import type { MediaData } from "../../logic/api/types";
 import useMediaStore from "../../logic/stores/MediaStore";
 
 

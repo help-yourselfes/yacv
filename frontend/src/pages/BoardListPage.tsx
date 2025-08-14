@@ -12,7 +12,7 @@ function BoardListPage() {
         if (!boardStore.order.length) {
             api.fetchBoards();
         }
-    }, [boardStore.order.length])
+    }, [])
 
     return (
         <div>

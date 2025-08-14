@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import useBoardStore from "../../logic/stores/BoardStore"
-import type { BoardData } from "../../logic/api/types";
 import BoardButton from "./BoardButton";
 import api from "../../logic/api/api";
 

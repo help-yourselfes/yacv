@@ -1,45 +1,34 @@
 import { create } from 'zustand';
-import api from '../api/api';
-import type { SiteData } from '../api/types';
+import type { SiteData } from '../../../../shared/types';
 
 interface SiteStore {
-    sites: SiteData[];
-    currentSite: SiteData | null;
+    list: Record<string, SiteData>;
+    currentId: string | null;
+    order: string[];
     loading: boolean;
     error: string | null;
-    setCurrentSite: (site: SiteData) => void
-    update: () => Promise<void>
+    setCurrent: (id: string) => void
+    setList: (list: SiteData[]) => void
 }
 
 const useSiteStore = create<SiteStore>((set) => ({
-    sites: [],
-    currentSite: null,
+    list: {},
+    order: [],
     loading: false,
     error: null,
-    setCurrentSite(site) {
-        set({ currentSite: site })
+    currentId: null,
+    setCurrent(id) {
+        set({currentId: id})
     },
-    update: async () => {
-        set({ loading: true, error: null });
-
-        try {
-            const res = await api.fetchSites()
-            if (!res.ok) throw new Error('Failed to fetch boards')
-            const sites: SiteData[] = res.data;
-
-            set({
-                sites,
-                loading: false,
-                error: null
-            })
-        } catch (err) {
-            set({
-                sites: [],
-                loading: false,
-                error: (err as Error).message
-            })
-        }
-    }
+    setList(list) {
+        const map: Record<string, SiteData> = {};
+        const order: string[] = [];
+        list.forEach((site) => {
+            map[site.id] = site;
+            order.push(site.id);
+        });
+        set({ list: map, order });
+    },
 }))
 
 export default useSiteStore;

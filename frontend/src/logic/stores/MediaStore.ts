@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { MediaData } from "../api/types";
+import type { MediaData } from "../../../../shared/types";
 
 interface MediaStore {
     mediaList: MediaData[];

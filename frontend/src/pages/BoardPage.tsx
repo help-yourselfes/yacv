@@ -22,7 +22,7 @@ function BoardPage() {
 
         };
         api.fetchThreads(boardId);
-    }, [boardId, current])
+    }, [])
 
     if (threadStore.loading) return <p>Loading...</p>
     if (threadStore.error) return <p>Error: {threadStore.error}</p>

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ThreadData } from '../api/types';
+import type { ThreadData } from '../../../../shared/types';
 import api from '../api/api';
 
 interface ThreadStore {

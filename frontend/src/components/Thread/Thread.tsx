@@ -1,6 +1,6 @@
 import type React from 'react'
 import './Thread.css'
-import type { ThreadData } from '../../logic/api/types'
+import type { ThreadData } from '../../../../shared/types'
 import { Link } from 'react-router-dom';
 import MediaList from '../Media/MediaList';
 

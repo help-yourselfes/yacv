@@ -20,21 +20,25 @@ function ThreadPage() {
 
     useEffect(() => {
         if (!boardId || isNaN(threadId)) return;
-        if (!threadRef) {
-            api.fetchThreads(boardId);
-        }
+
         if (!store.threadId) {
-            console.log(store.threadId)
             api.fetchReplies(boardId, threadId);
         }
 
-    }, [threadId, boardId, store.threadId])
+    }, [])
+    useEffect(() => {
+        if (!boardId) return;
+        if (!threadRef) {
+            api.fetchThreads(boardId);
+        }
+    }, [])
+
     return (
         <div>
             This is thread page. <button onClick={() => navigate(-1)}>Back to <b>{boardId}</b></button>
             <br />
             {boardId} :: {threadId}
-            <Thread thread={threadRef} link=""/>
+            <Thread thread={threadRef} link="" />
 
             {
                 store.order.map(id => {

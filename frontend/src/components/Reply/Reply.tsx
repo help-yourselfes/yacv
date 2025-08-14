@@ -1,6 +1,6 @@
 import type React from 'react'
 import './Reply.css'
-import type { ReplyData } from '../../logic/api/types'
+import type { ReplyData } from '../../../../shared/types'
 
 interface ReplyProps {
     reply: ReplyData;
