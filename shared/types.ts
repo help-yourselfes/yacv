@@ -25,5 +25,6 @@ export interface SiteData {
     id: string;
     name: string;
     url: string;
+    pictureUrl: string,
     description: string;
 }
