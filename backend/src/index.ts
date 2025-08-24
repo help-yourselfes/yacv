@@ -9,7 +9,6 @@ const PORT = 3000;
 AdapterList.init();
 
 const siteFetch = '/api/fetch/:siteId';
-// Статика: хостим frontend
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API-прокси~
@@ -58,6 +57,8 @@ app.get('/api/sites', (req, res) => {
   const sites = AdapterList.getList()
   res.json({sites});
 })
+
+app.use('/siteIcons', express.static(path.join(__dirname, '../shared/images/sites')));
 
 // SPA fallback
 app.get('/*path', (_req, res) => {

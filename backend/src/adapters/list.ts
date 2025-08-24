@@ -1,28 +1,54 @@
+import { SiteData } from "../../../shared/types";
+import manyUrlAdapter from "./manyurl";
 import { offlineAdapter } from "./offline";
 import { Adapter } from "./types";
 
 const AdapterList = new class {
-    list: Record<string, Adapter> = {};
+    adapters: Record<string, Adapter> = {};
+    sites: Record<string, SiteData> = {};
     order: string[] = [];
-    addAdapter(adapter: Adapter) {
-        const id = adapter.site.id;
+    addAdapter(site: SiteData, adapter: Adapter) {
+        const id = site.id;
         this.order.push(id);
-        this.list[id] = adapter;
+        this.adapters[id] = adapter;
+        this.sites[id] = site;
     }
     getList() {
-        return this.order.map(id => this.list[id].site)
+        return this.order.map(id => this.sites[id])
     }
 
-    has(id:string) {
-        return this.list[id] !== undefined
+    has(id: string) {
+        return this.adapters[id] !== undefined
     }
 
-    get(id:string) {
-        return this.list[id];
+    get(id: string) {
+        return this.adapters[id];
     }
 
     init() {
-        this.addAdapter(offlineAdapter);
+        this.addAdapter({
+            description: `An offline adapter with setTimeout
+                in returnable promises`,
+            id: 'offline',
+            name: 'Offline adapter',
+            url: 'none',
+            pictureUrl: 'offline',
+        }, offlineAdapter);
+        this.addAdapter({
+            description: 'Some site with abc.def url',
+            id: 'abc',
+            name: 'ABC def',
+            url: 'abc.def',
+            pictureUrl: 'abc'
+        }, manyUrlAdapter('abc.def'))
+        this.addAdapter({
+            description: `Another one site with the same
+            adapter as ABCdef one`,
+            id: 'another',
+            name: 'Another Url',
+            url: 'another.url',
+            pictureUrl: 'another',
+        }, manyUrlAdapter('another.url'))
     }
 }
 

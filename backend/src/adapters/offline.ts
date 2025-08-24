@@ -1,27 +1,34 @@
 import { BoardData, MediaData, ReplyData, ThreadData } from "../../../shared/types";
 import { Adapter } from "./types";
 export const offlineAdapter: Adapter = {
-    site: {
-        id: 'offline',
-        description: `An offline adapter that dont require access to the web. It can generate any data to test YACV functionality`,
-        name: 'Offline adapter',
-        url: ''
-    },
+    url: 'offline',
     async fetchBoards() {
         return new Promise<BoardData[]>(resolve => {
-            resolve(['a', 'b', 'r', 't', 'asx'].map(id =>
-                generateBoard(id)
-            ))
+            setTimeout(() => {
+                resolve(['a', 'b', 'r', 't', 'asx'].map(id =>
+                    generateBoard(id)
+                ))
+            }, 500
+            )
         });
     },
     async fetchThreads(boardId) {
-        return new Promise<ThreadData[]>(resolve => resolve(array(25).map(v => generateThread(boardId, v))))
+        return new Promise<ThreadData[]>(resolve =>
+            setTimeout(() => {
+
+                resolve(array(25).map(v => generateThread(boardId, v)))
+            }, 500)
+        )
     },
     async fetchReplies(boardId, threadId) {
-        return new Promise(res => res({
-            thread: generateThread(boardId, threadId),
-            replies: array(45).map(v => generateReply(threadId, v))
-        }))
+        return new Promise(res =>
+            setTimeout(() => {
+                res({
+                    thread: generateThread(boardId, threadId),
+                    replies: array(45).map(v => generateReply(threadId, v))
+                })
+            }, 500)
+        )
     }
 }
 

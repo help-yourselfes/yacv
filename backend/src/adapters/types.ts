@@ -1,7 +1,7 @@
-import { BoardData, ReplyData, SiteData, ThreadData } from '../../../shared/types';
+import { BoardData, ReplyData, ThreadData } from '../../../shared/types';
 
 export interface Adapter {
-    site: SiteData;
+    url: string,
     fetchBoards: () => Promise<BoardData[]>; // Fetches an array of BoardData
     fetchThreads: (boardId: string) => Promise<ThreadData[]>; // Fetches an array of ThreadData for a specific board
     fetchReplies: (boardId: string, threadId: number) => Promise<{
