@@ -2,7 +2,7 @@ import boardStore from "../stores/BoardStore";
 import replyStore from "../stores/ReplyStore";
 import threadStore from "../stores/ThreadStore";
 import siteStore from "../stores/SiteStore"
-import type { BoardData, MediaData, ReplyData, SiteData, ThreadData } from "../../../../shared/types";
+import type { BoardData, ReplyData, SiteData, ThreadData } from "../../../../shared/types";
 
 export const api = {
     siteId: "offline",
@@ -41,13 +41,13 @@ export const api = {
         
         console.log('fetch boards')
         try {
-            const response = await fetch(this.apiFetch+'/boards'); // Adjust the URL if needed
+            const response = await fetch(this.apiFetch+'/boards'); 
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
 
             const data = await response.json();
-            const boards: BoardData[] = data.boards; // Assuming the response structure is { boards: [...] }
+            const boards: BoardData[] = data.boards;
 
             boardStore.setState({
                 list: Object.fromEntries(
@@ -65,13 +65,13 @@ export const api = {
     async fetchThreads(boardId: string) {
         console.log('fetch threads')
         try {
-            const response = await fetch(`${this.apiFetch}/view/${boardId}`); // Adjust the URL if needed
+            const response = await fetch(`${this.apiFetch}/view/${boardId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
 
             const data = await response.json();
-            const threads: ThreadData[] = data.threads; // Assuming the response structure is { threads: [...] }
+            const threads: ThreadData[] = data.threads;
 
             threadStore.setState({
                 list: Object.fromEntries(
@@ -88,13 +88,13 @@ export const api = {
     async fetchReplies(boardId: string, threadId: number) {
         console.log('fetch replies')
         try {
-            const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`); // Adjust the URL if needed
+            const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`); 
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
 
             const data = await response.json();
-            const replies: ReplyData[] = data.replies; // Assuming the response structure is { replies: [...] }
+            const replies: ReplyData[] = data.replies; 
             replyStore.setState(state => ({
                 boardId: boardId,
                 threadId: threadId,
@@ -117,27 +117,5 @@ export const api = {
         if (boardId && threadId) await this.fetchReplies(boardId, threadId);
     }
 };
-
-// ----------------------
-
-function Thread(boardId: string, threadId: number): ThreadData {
-    return {
-        caption: `Thread #${threadId}`,
-        id: threadId,
-        media: [Image()],
-        text: `This is a ${threadId}'s thread in this board! <br> Welcome to it!`
-    };
-}
-
-function Image(): MediaData {
-    return {
-        dimensions: { w: 128, h: 128 },
-        extention: 'png',
-        fullUrl: '/image.png',
-        name: 'image',
-        previewUrl: '/preview/image.png',
-        timestamp: 12345678
-    };
-}
 
 export default api;

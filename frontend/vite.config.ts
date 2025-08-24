@@ -10,7 +10,12 @@ export default defineConfig({
   }
   ,  server: {
     proxy: {
-      '/api': 'http://localhost:3000'
+      '/api': 'http://localhost:3000',
+      '/images': {
+        target: 'http://localhost:3000', // адрес вашего бэкенда
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/images/, '/images'),
+      }
     }
   }
 })

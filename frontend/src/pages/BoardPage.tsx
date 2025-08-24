@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useThreadStore from "../logic/stores/ThreadStore";
 import { useEffect } from "react";
 import useBoardStore from "../logic/stores/BoardStore";
@@ -8,6 +8,7 @@ import api from "../logic/api/api";
 
 function BoardPage() {
     const params = useParams();
+    const siteId = params.siteId;
     const boardId = params.boardId;
     const BoardStore = useBoardStore();
     const current = BoardStore.currentId ? BoardStore.list[BoardStore.currentId] : null;
@@ -21,7 +22,9 @@ function BoardPage() {
             });
 
         };
-        api.fetchThreads(boardId);
+        if (!threadStore.order.length) {
+            api.fetchThreads(boardId);
+        }
     }, [])
 
     if (threadStore.loading) return <p>Loading...</p>
@@ -39,7 +42,7 @@ function BoardPage() {
                     return <Thread
                         key={id}
                         thread={thread}
-                        link={`/view/${boardId}/${id}`}
+                        link={`/view/${siteId}/${boardId}/${id}`}
                     />
                 }
 
