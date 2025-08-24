@@ -11,7 +11,7 @@ AdapterList.init();
 const siteFetch = '/api/fetch/:siteId';
 app.use(express.static(path.join(__dirname, '../public')));
 
-// API-прокси~
+
 app.get(`${siteFetch}/boards`, async (req, res) => {
   const { siteId } = req.params;
   const adapter = AdapterList.get(siteId)
@@ -58,7 +58,7 @@ app.get('/api/sites', (req, res) => {
   res.json({sites});
 })
 
-app.use('/siteIcons', express.static(path.join(__dirname, '../shared/images/sites')));
+app.use('/images', express.static(path.join(__dirname, '../../shared/images')));
 
 // SPA fallback
 app.get('/*path', (_req, res) => {

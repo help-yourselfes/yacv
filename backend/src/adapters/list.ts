@@ -32,14 +32,14 @@ const AdapterList = new class {
             id: 'offline',
             name: 'Offline adapter',
             url: 'none',
-            pictureUrl: 'offline',
+            pictureUrl: 'offline.png',
         }, offlineAdapter);
         this.addAdapter({
             description: 'Some site with abc.def url',
             id: 'abc',
             name: 'ABC def',
             url: 'abc.def',
-            pictureUrl: 'abc'
+            pictureUrl: 'offline.png'
         }, manyUrlAdapter('abc.def'))
         this.addAdapter({
             description: `Another one site with the same
@@ -47,7 +47,7 @@ const AdapterList = new class {
             id: 'another',
             name: 'Another Url',
             url: 'another.url',
-            pictureUrl: 'another',
+            pictureUrl: 'offline.png',
         }, manyUrlAdapter('another.url'))
     }
 }
