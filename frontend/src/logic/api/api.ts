@@ -8,13 +8,16 @@ export const api = {
     siteId: "offline",
     apiFetch: '/api/fetch/offline',
     updateSite(id: string) {
-        const store =siteStore;
+        const store = siteStore;
         console.log('update site')
 
         this.siteId = id;
         this.apiFetch = `/api/fetch/${this.siteId}`
         const site = store.getState().list[id];
-        store.setState({current: site})
+        store.setState({ current: site })
+        boardStore.getState().clear()
+        threadStore.getState().clear()
+        replyStore.getState().clear()
     },
 
     async fetchSites() {
@@ -42,7 +45,7 @@ export const api = {
             console.error('Error fetching sites:', error);
             if (error instanceof Error) {
                 store.setState({ error: error.message })
-                
+
             }
         } finally {
             store.setState({ loading: false })
@@ -51,6 +54,8 @@ export const api = {
     async fetchBoards() {
         const store = boardStore;
         console.log('fetch boards')
+        store.setState({ error: null, loading: true })
+
         try {
             const response = await fetch(this.apiFetch + '/boards');
             if (!response.ok) {
@@ -81,6 +86,8 @@ export const api = {
     async fetchThreads(boardId: string) {
         const store = threadStore;
         console.log('fetch threads')
+        store.setState({ error: null, loading: true })
+
         try {
             const response = await fetch(`${this.apiFetch}/view/${boardId}`);
             if (!response.ok) {
@@ -110,6 +117,8 @@ export const api = {
     async fetchReplies(boardId: string, threadId: number) {
         const store = replyStore;
         console.log('fetch replies')
+        store.setState({ error: null, loading: true })
+
         try {
             const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`);
             if (!response.ok) {
