@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { ThreadData } from '../../../../shared/types';
-import api from '../api/api';
 
 interface ThreadStore {
     currentThread: ThreadData | null;
@@ -10,6 +9,7 @@ interface ThreadStore {
     error: string | null;
     setCurrentThread: (thread: ThreadData) => void
     setThreads: (list: ThreadData[]) => void;
+    clear: () => void
 }
 
 const useThreadStore = create<ThreadStore>((set, get) => ({
@@ -23,6 +23,9 @@ const useThreadStore = create<ThreadStore>((set, get) => ({
     },
     setThreads: (list) => {
         set({list})
+    },
+     clear: () => {
+        set({list: {}, order: [], currentThread: null})
     }
 }))
 

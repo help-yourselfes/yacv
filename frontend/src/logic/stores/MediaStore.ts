@@ -23,14 +23,14 @@ const useMediaStore = create<MediaStore>((set) => ({
         activeMediaId: state.activeMedia === media ? null : state.activeMedia,
     }))
     ,
-    setActiveMedia: (media) => set((state) => ({
+    setActiveMedia: (media) => set({
         activeMedia: media
-    }))
+    })
     ,
-    clear: () => set((state) => ({
-        list: [],
+    clear: () => set({
+        mediaList: [],
         activeMedia: null
-    }))
+    })
     ,
 }));
 

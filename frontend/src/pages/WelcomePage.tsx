@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import Spinner from "../components/primitives/Loader/Spinner";
 import { ErrorBox } from "../components/primitives/ErrorBox/ErrorBox";
 
-
 const WelcomePage = () => {
     const siteStore = useSiteStore();
     const site = useSiteStore(state => state.current);
@@ -28,7 +27,12 @@ const WelcomePage = () => {
                 (siteStore.error &&
                     <ErrorBox msg={siteStore.error} />
                 ) ||
-                <div>
+                <div> {
+                    siteStore.order.length === 0 ? <span>Backend do not provide any access to sites</span> :
+                        siteStore.order.length === 1 ? <span>Backend provide access to that site:</span> : <span>
+                            Backend provide access to those sites:
+                        </span>
+                }
                     <div>
                         {siteStore.order.map(id => {
                             const site = siteStore.list[id]
@@ -38,8 +42,8 @@ const WelcomePage = () => {
                         })}
                     </div>
                     {site &&
-                        <div>
-                            <SiteIcon name={site.pictureUrl} />
+                        <div className="site info box">
+                            <SiteIcon pictureUrl={site.pictureUrl} />
                             <p>{site.name}</p>
                             <p>{site.description}</p>
                             <Link to={`view/${site.id}`}>Board list</Link>

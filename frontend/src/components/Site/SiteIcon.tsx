@@ -1,9 +1,9 @@
 interface props {
-    name: string
+    pictureUrl: string
 }
 
-export const SiteIcon: React.FC<props> = ({ name }) => {
+export const SiteIcon: React.FC<props> = ({ pictureUrl }) => {
     return (
-        <img src={`/images/sites/${name}`} />
+        <img src={`/images/sites/${pictureUrl}`} />
     )
 }

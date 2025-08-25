@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { ReplyData, ThreadData } from '../../../../shared/types';
-import api from '../api/api';
 
 interface ReplyStore {
     boardId: string | null;
@@ -10,6 +9,7 @@ interface ReplyStore {
     loading: boolean;
     error: string | null;
     setReplies: (list: ReplyData[]) => void;
+    clear: () => void;
 }
 
 const useReplyStore = create<ReplyStore>((set) => ({
@@ -22,6 +22,10 @@ const useReplyStore = create<ReplyStore>((set) => ({
 
     setReplies: (list) => {
         set({list: list})
+    },
+
+    clear: () => {
+        set({list: {}, order: [], threadId: null, boardId: null})
     }
 }))
 

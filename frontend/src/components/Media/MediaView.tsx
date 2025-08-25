@@ -1,19 +1,27 @@
 import type React from "react";
-import type { MediaProps } from "./MediaProps";
+import type { FloatingMediaProps } from "./MediaProps";
 import useMediaStore from "../../logic/stores/MediaStore";
 
+const MediaView: React.FC<FloatingMediaProps> = ({ media, active, parentPos }) => {
 
+    const { hide } = useMediaStore();
 
-const MediaView: React.FC<MediaProps> = ({ media }) => {
-    const store = useMediaStore();
-    
     const handleClick = () => {
-        store.hide(media);
+        hide(media);
     }
 
-    return (<div>
-        <img src={media.previewUrl} onClick={handleClick} />
-    </div>)
+    const isActive = active ? 'active' : '';
+
+    return (
+        <div>
+            <img
+                src={media.previewUrl}
+                onClick={handleClick}
+                className={`media-view ${isActive}`}
+                style={{ '--x': parentPos.x, '--y': parentPos.y } as React.CSSProperties}
+            />
+        </div>
+    )
 }
 
 export default MediaView

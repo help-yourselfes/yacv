@@ -10,6 +10,7 @@ interface BoardStore {
 
     setList: (list: BoardData[]) => void;
     setCurrentId: (id: string) => void;
+    clear: () => void;
 }
 
 const useBoardStore = create<BoardStore>((set) => ({
@@ -30,6 +31,9 @@ const useBoardStore = create<BoardStore>((set) => ({
     },
 
     setCurrentId: (id) => set({ currentId: id }),
+    clear: () => {
+        set({list: {}, order: [], currentId: null})
+    }
 }));
 
 export default useBoardStore;

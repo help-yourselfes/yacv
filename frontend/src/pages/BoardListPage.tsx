@@ -3,24 +3,15 @@ import api from "../logic/api/api";
 import useBoardStore from "../logic/stores/BoardStore";
 import { useEffect } from "react";
 import useSiteStore from "../logic/stores/SiteStore";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ErrorBox } from "../components/primitives/ErrorBox/ErrorBox";
+import { SiteIcon } from "../components/Site/SiteIcon";
+import { wordCounter as wC } from "../logic/etc/english";
 
 
 function BoardListPage() {
-    const params = useParams();
-    const siteId: string | undefined = params.siteId;
-
     const boardStore = useBoardStore();
-    const siteStore = useSiteStore();
-
-    const site = siteId ? siteStore.list[siteId] : null;
-
-    useEffect(() => {
-        if (!siteStore.order.length) {
-            api.fetchSites();
-        }
-    }, [])
+    const site = useSiteStore(state => state.current);
 
     useEffect(() => {
         if (!boardStore.order.length) {
@@ -28,10 +19,29 @@ function BoardListPage() {
         }
     }, [])
 
+    const boardCount = {
+        total: boardStore.order.length,
+        nswf: 0,
+        swf: 0,
+    };
 
+
+    boardStore.order.forEach(id => { if (boardStore.list[id].nswf) boardCount.nswf++ });
+    boardCount.swf = boardCount.total - boardCount.nswf;
     return (
         <div>
             {site ? <>
+                <div className="site board-count">
+                    <SiteIcon pictureUrl={site.pictureUrl} />
+                    <div className="">
+                        <p>There is {wC(boardCount.total, 'board')}</p>
+                        <p>
+                            <span className="swf count">{boardCount.swf}</span> SFW, {' '}
+                            <span className="nswf count">{boardCount.nswf}</span> NSFW
+                        </p>
+                    </div>
+                </div>
+
                 Select board:
                 {
                     boardStore.order.map(id => {
@@ -40,8 +50,8 @@ function BoardListPage() {
                     })
                 }
             </> : <>
-                <ErrorBox msg={`There is no acces to that site`} />
-                <Link to='/'>Back to main page</Link>
+                <ErrorBox msg={`There is no access to that site`} />
+                <Link to='/'>Back to the main page</Link>
             </>
             }
         </div>

@@ -4,4 +4,9 @@ interface MediaProps {
     media: MediaData;
 }
 
-export type {MediaProps}
+interface FloatingMediaProps extends MediaProps {
+    active: boolean;
+    parentPos: {x: number, y:number};
+}
+
+export type {MediaProps, FloatingMediaProps}
