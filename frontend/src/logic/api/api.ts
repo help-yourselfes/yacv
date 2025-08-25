@@ -14,7 +14,9 @@ export const api = {
     },
 
     async fetchSites() {
+        const store = siteStore;
         console.log('fetch sites')
+        store.setState({ error: null, loading: true })
         try {
             const response = await fetch('/api/sites');
             if (!response.ok) {
@@ -23,7 +25,7 @@ export const api = {
             const data = await response.json();
             const sites: SiteData[] = data.sites;
             console.log(sites)
-            siteStore.setState({
+            store.setState({
                 list: Object.fromEntries(
                     sites.map(s => [s.id, s])
                 ),
@@ -35,13 +37,18 @@ export const api = {
 
         } catch (error) {
             console.error('Error fetching sites:', error);
+            if (error instanceof Error) {
+                store.setState({ error: error.message })
+            }
+        } finally {
+            store.setState({ loading: false })
         }
     },
     async fetchBoards() {
-        
+        const store = boardStore;
         console.log('fetch boards')
         try {
-            const response = await fetch(this.apiFetch+'/boards'); 
+            const response = await fetch(this.apiFetch + '/boards');
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
@@ -49,7 +56,7 @@ export const api = {
             const data = await response.json();
             const boards: BoardData[] = data.boards;
 
-            boardStore.setState({
+            store.setState({
                 list: Object.fromEntries(
                     boards.map(b => [b.id, b])
                 ),
@@ -59,10 +66,16 @@ export const api = {
             });
         } catch (error) {
             console.error('Error fetching boards:', error);
+            if (error instanceof Error) {
+                store.setState({ error: error.message })
+            }
+        } finally {
+            store.setState({ loading: false })
         }
     },
 
     async fetchThreads(boardId: string) {
+        const store = threadStore;
         console.log('fetch threads')
         try {
             const response = await fetch(`${this.apiFetch}/view/${boardId}`);
@@ -73,7 +86,7 @@ export const api = {
             const data = await response.json();
             const threads: ThreadData[] = data.threads;
 
-            threadStore.setState({
+            store.setState({
                 list: Object.fromEntries(
                     threads.map(t => [t.id, t])
                 ),
@@ -81,21 +94,27 @@ export const api = {
             });
         } catch (error) {
             console.error('Error fetching threads:', error);
+            if (error instanceof Error) {
+                store.setState({ error: error.message })
+            }
+        } finally {
+            store.setState({ loading: false })
         }
     },
 
 
     async fetchReplies(boardId: string, threadId: number) {
+        const store = replyStore;
         console.log('fetch replies')
         try {
-            const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`); 
+            const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
 
             const data = await response.json();
-            const replies: ReplyData[] = data.replies; 
-            replyStore.setState(state => ({
+            const replies: ReplyData[] = data.replies;
+            store.setState(state => ({
                 boardId: boardId,
                 threadId: threadId,
                 list: Object.fromEntries(replies.map(r => [r.id, r])),
@@ -103,6 +122,11 @@ export const api = {
             }));
         } catch (error) {
             console.error('Error fetching replies:', error);
+            if (error instanceof Error) {
+                store.setState({ error: error.message })
+            }
+        } finally {
+            store.setState({ loading: false })
         }
     },
 
