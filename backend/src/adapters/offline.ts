@@ -33,7 +33,7 @@ export const offlineAdapter: Adapter = {
 }
 
 function generateBoard(id: string): BoardData {
-    return { id }
+    return { id, nswf: Math.random() > 0.5 }
 }
 
 function generateThread(boardId: string, id: number): ThreadData {

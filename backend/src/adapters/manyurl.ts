@@ -5,7 +5,7 @@ export default function manyUrlAdapter(url: string): Adapter {
         url,
         fetchBoards() {
             return new Promise(res => {
-                res([{ id: 'a' }, { id: 'b' }])
+                res([{ id: 'a',nswf:false }, { id: 'b', nswf: true }])
             })
         },
         fetchReplies(boardId, threadId) {
