@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 function ErrorPage() {
     const [params] = useSearchParams();
@@ -8,9 +8,9 @@ function ErrorPage() {
         <div>
 
             <h1>
-                Ошибка: {msg || "Неизвестная"}
+                Error: {msg || "Unknown"}
             </h1>
-            <a href="/">На главную</a>
+            <Link to="/">Back to main page</Link>
         </div>
     );
 }

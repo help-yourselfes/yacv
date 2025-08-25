@@ -3,7 +3,7 @@ import type { SiteData } from '../../../../shared/types';
 
 interface SiteStore {
     list: Record<string, SiteData>;
-    currentId: string | null;
+    current: SiteData | null;
     order: string[];
     loading: boolean;
     error: string | null;
@@ -11,14 +11,15 @@ interface SiteStore {
     setList: (list: SiteData[]) => void
 }
 
-const useSiteStore = create<SiteStore>((set) => ({
+const useSiteStore = create<SiteStore>((set, get) => ({
     list: {},
     order: [],
     loading: false,
     error: null,
-    currentId: null,
+    current: null,
     setCurrent(id) {
-        set({currentId: id})
+        const site: SiteData = get().list[id];
+        set({current: site})
     },
     setList(list) {
         const map: Record<string, SiteData> = {};

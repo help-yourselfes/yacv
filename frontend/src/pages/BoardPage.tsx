@@ -10,6 +10,7 @@ function BoardPage() {
     const params = useParams();
     const siteId = params.siteId;
     const boardId = params.boardId;
+
     const BoardStore = useBoardStore();
     const current = BoardStore.currentId ? BoardStore.list[BoardStore.currentId] : null;
     const threadStore = useThreadStore();

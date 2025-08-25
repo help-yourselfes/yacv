@@ -3,7 +3,8 @@ import api from "../logic/api/api";
 import useBoardStore from "../logic/stores/BoardStore";
 import { useEffect } from "react";
 import useSiteStore from "../logic/stores/SiteStore";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { ErrorBox } from "../components/primitives/ErrorBox/ErrorBox";
 
 
 function BoardListPage() {
@@ -14,7 +15,7 @@ function BoardListPage() {
     const siteStore = useSiteStore();
 
     const site = siteId ? siteStore.list[siteId] : null;
-    
+
     useEffect(() => {
         if (!siteStore.order.length) {
             api.fetchSites();
@@ -38,8 +39,11 @@ function BoardListPage() {
                         return <BoardButton key={board.id} siteId={site.id} board={board} selected={false} />
                     })
                 }
-            </> :
-                <span>No site</span>}
+            </> : <>
+                <ErrorBox msg={`There is no acces to that site`} />
+                <Link to='/'>Back to main page</Link>
+            </>
+            }
         </div>
     )
 }

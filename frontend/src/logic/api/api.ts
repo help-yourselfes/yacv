@@ -8,9 +8,13 @@ export const api = {
     siteId: "offline",
     apiFetch: '/api/fetch/offline',
     updateSite(id: string) {
+        const store =siteStore;
         console.log('update site')
+
         this.siteId = id;
         this.apiFetch = `/api/fetch/${this.siteId}`
+        const site = store.getState().list[id];
+        store.setState({current: site})
     },
 
     async fetchSites() {
@@ -24,7 +28,6 @@ export const api = {
             }
             const data = await response.json();
             const sites: SiteData[] = data.sites;
-            console.log(sites)
             store.setState({
                 list: Object.fromEntries(
                     sites.map(s => [s.id, s])
@@ -32,13 +35,14 @@ export const api = {
                 order: Array.from(
                     sites.map(b => b.id)
                 ),
-                currentId: sites[0].id
+                current: sites[0]
             })
 
         } catch (error) {
             console.error('Error fetching sites:', error);
             if (error instanceof Error) {
                 store.setState({ error: error.message })
+                
             }
         } finally {
             store.setState({ loading: false })

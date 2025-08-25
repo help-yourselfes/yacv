@@ -4,26 +4,24 @@ import BoardButton from "./BoardButton";
 import api from "../../logic/api/api";
 import Spinner from "../primitives/Loader/Spinner";
 import useSiteStore from "../../logic/stores/SiteStore";
-import { useParams } from "react-router-dom";
+import { SiteIcon } from "../Site/SiteIcon";
 
 
 function SideBar() {
-    const params = useParams();
-    const siteId: string | undefined = params.siteId;
     const { list, order, currentId, error, loading } = useBoardStore();
-    const site = siteId ? useSiteStore().list[siteId] : null;
-
+    const site = useSiteStore(state => state.current);
+    console.log(site)
     useEffect(() => {
         if (!order.length) {
             api.fetchBoards();
         }
-    }, [order.length])
+    }, [])
 
     return (
-        <div className="side-bar"> {siteId && site && <>
+        <div className="side-bar"> {site && <>
 
             <div>
-                <img src={site.pictureUrl} />
+                <SiteIcon name={site.pictureUrl} />
                 <span>{site.name}</span>
             </div>
 
@@ -41,7 +39,7 @@ function SideBar() {
                             const board = list[boardId];
                             return (
                                 <BoardButton
-                                    siteId={siteId}
+                                    siteId={site.id}
                                     key={board.id}
                                     board={board}
                                     selected={board.id === currentId}

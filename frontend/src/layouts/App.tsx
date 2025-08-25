@@ -16,11 +16,11 @@ function App() {
         <Routes>
           <Route path="/" element={<WelcomePage />} />
 
-          <Route path='/view/:siteId' element={<BoardListPage />} />
+          <Route path='/view/:siteId/' element={<BoardListPage />} />
           <Route path='/view/:siteId/:boardId' element={<BoardPage />} />
           <Route path='/view/:siteId/:boardId/:threadId' element={<ThreadPage />} />
-
-          <Route path='/error' element={ <ErrorPage />} />
+          
+          <Route path='/error' element={<ErrorPage />} />
           <Route path='*' element={<Navigate to='/error?msg=404' replace />} />
         </Routes>
       </Layout>
