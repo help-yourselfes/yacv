@@ -4,12 +4,12 @@ export default function manyUrlAdapter(url: string): Adapter {
     return {
         url,
         fetchBoards() {
-            return new Promise(res => {
+            return new Promise(res => setTimeout(() => {
                 res([{ id: 'a', name: '/a/', nsfw: false }, { id: 'b', name: '/b/', nsfw: true }])
-            })
+            }, 500))
         },
         fetchReplies(boardId, threadId) {
-            return new Promise(res => res({
+            return new Promise(res => setTimeout(() => res({
                 thread: {
                     caption: `Thread: ${threadId}`,
                     author: 'OP',
@@ -27,10 +27,10 @@ export default function manyUrlAdapter(url: string): Adapter {
                         media: [], text: 'Reply'
                     }
                 ]
-            }))
+            }), 500))
         },
         fetchThreads(boardId) {
-            return new Promise(res => res([
+            return new Promise(res => setTimeout(() => res([
                 {
                     caption: `Thread: 12345678`,
                     author: 'OP',
@@ -39,7 +39,7 @@ export default function manyUrlAdapter(url: string): Adapter {
                     id: 12345678,
                     media: [], text: `Thread text to a ${boardId} board.`
                 }
-            ]))
+            ]), 500))
         },
     }
 }
