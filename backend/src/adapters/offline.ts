@@ -33,23 +33,18 @@ export const offlineAdapter: Adapter = {
 }
 
 function generateBoard(id: string): BoardData {
-    return { id, nswf: Math.random() > 0.5 }
+    return { id, name: `/${id}/`, nsfw: Math.random() > 0.5 }
 }
 
 function generateThread(boardId: string, id: number): ThreadData {
-    return {
-        id,
-        caption: `Thread number ${id}`,
-        media: [1, 2, 3, 4].map(() => generateMedia()),
-        text: generateText(12)
-    }
+    return {...generateReply(id, id), caption: ''}
 }
 
 function generateReply(threadId: number, id: number): ReplyData {
     return {
-        id,
+        id,author: 'Anon', date: '01.02.2003', time: '12:34:56',
         text: generateText(12),
-        media: array(4).map(_ => generateMedia())
+        media: array(4).map(v => generateMedia(v))
     }
 }
 
@@ -60,11 +55,12 @@ function generateText(length: number) {
     return result;
 }
 
-function generateMedia(): MediaData {
+function generateMedia(id: number): MediaData {
     const ext = choose(['png', 'jpeg', 'bmp']);
     const name = choose(['cat', 'dog', 'image', 'picture', 'untitled']);
 
     return {
+        id,
         dimensions: { w: 128, h: 256 },
         extention: ext,
         name,

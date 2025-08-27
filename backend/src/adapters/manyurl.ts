@@ -5,24 +5,40 @@ export default function manyUrlAdapter(url: string): Adapter {
         url,
         fetchBoards() {
             return new Promise(res => {
-                res([{ id: 'a',nswf:false }, { id: 'b', nswf: true }])
+                res([{ id: 'a', name: '/a/', nsfw: false }, { id: 'b', name: '/b/', nsfw: true }])
             })
         },
         fetchReplies(boardId, threadId) {
             return new Promise(res => res({
                 thread: {
                     caption: `Thread: ${threadId}`,
+                    author: 'OP',
+                    date: '01.02.2003',
+                    time: '12:34:56',
                     id: threadId,
                     media: [], text: `Thread text to a ${boardId} board.`
-                }, 
+                },
                 replies: [
-                    {id: 0,media:[],text: 'Reply'}
+                    {
+                        id: 0,
+                        author: 'Anon',
+                        date: '02.02.2003',
+                        time: '12:34:56',
+                        media: [], text: 'Reply'
+                    }
                 ]
             }))
         },
         fetchThreads(boardId) {
             return new Promise(res => res([
-                {caption: 'Thread', id:0, media:[], text:'Text'}
+                {
+                    caption: `Thread: 12345678`,
+                    author: 'OP',
+                    date: '01.02.2003',
+                    time: '12:34:56',
+                    id: 12345678,
+                    media: [], text: `Thread text to a ${boardId} board.`
+                }
             ]))
         },
     }
