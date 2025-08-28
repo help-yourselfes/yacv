@@ -1,14 +1,14 @@
 import { create } from 'zustand';
-import type { ThreadData } from '../../../../shared/types';
+import type { PostData } from '../../../../shared/types';
 
 interface ThreadStore {
-    currentThread: ThreadData | null;
-    list: Record<number, ThreadData>;
+    currentThread: PostData | null;
+    list: Record<number, PostData>;
     order: number[];
     loading: boolean;
     error: string | null;
-    setCurrentThread: (thread: ThreadData) => void
-    setThreads: (list: ThreadData[]) => void;
+    setCurrentThread: (thread: PostData) => void
+    setThreads: (list: PostData[]) => void;
     clear: () => void
 }
 

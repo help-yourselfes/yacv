@@ -1,4 +1,4 @@
-import { BoardData, MediaData, ReplyData, ThreadData } from "../../../shared/types";
+import { BoardData, MediaData, PostData } from "../../../shared/types";
 import { Adapter } from "./types";
 export default function manyUrlAdapter(url: string): Adapter {
     return {
@@ -12,19 +12,28 @@ export default function manyUrlAdapter(url: string): Adapter {
             return new Promise(res => setTimeout(() => res({
                 thread: {
                     caption: `Thread: ${threadId}`,
-                    author: 'OP',
-                    date: '01.02.2003',
-                    time: '12:34:56',
-                    id: threadId,
-                    media: [], text: `Thread text to a ${boardId} board.`
+                    meta: {
+                        author: 'OP',
+                        date: '01.02.2003',
+                        time: '12:34:56',
+                        id: threadId,
+                    },
+                    content: [{ type: "plainText", text: `Thread text to a ${boardId} board.` }],
+                    media: [],
+                    replies: []
                 },
                 replies: [
                     {
-                        id: 0,
-                        author: 'Anon',
-                        date: '02.02.2003',
-                        time: '12:34:56',
-                        media: [], text: 'Reply'
+                        meta: {
+                            id: 0,
+                            author: 'Anon',
+                            date: '02.02.2003',
+                            time: '12:34:56',
+                        },
+
+                        content: [{ type: "plainText", text: 'Reply' }],
+                        replies: [],
+                        media: []
                     }
                 ]
             }), 500))
@@ -32,12 +41,15 @@ export default function manyUrlAdapter(url: string): Adapter {
         fetchThreads(boardId) {
             return new Promise(res => setTimeout(() => res([
                 {
+                    meta: {
+                        author: 'OP',
+                        date: '01.02.2003',
+                        time: '12:34:56',
+                        id: 12345678,
+                    },
                     caption: `Thread: 12345678`,
-                    author: 'OP',
-                    date: '01.02.2003',
-                    time: '12:34:56',
-                    id: 12345678,
-                    media: [], text: `Thread text to a ${boardId} board.`
+                    content: [{ type: "plainText", text: `Thread text to a ${boardId} board.` }],
+                    media: [], replies: []
                 }
             ]), 500))
         },

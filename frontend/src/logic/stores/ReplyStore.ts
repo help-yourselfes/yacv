@@ -1,14 +1,14 @@
 import { create } from 'zustand';
-import type { ReplyData, ThreadData } from '../../../../shared/types';
+import type { PostData, ReplyData, ThreadData } from '../../../../shared/types';
 
 interface ReplyStore {
     boardId: string | null;
     threadId: number | null;
-    list: Record<number, ReplyData>;
+    list: Record<number, PostData>;
     order: number[];
     loading: boolean;
     error: string | null;
-    setReplies: (list: ReplyData[]) => void;
+    setReplies: (list: PostData[]) => void;
     clear: () => void;
 }
 

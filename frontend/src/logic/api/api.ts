@@ -2,11 +2,11 @@ import boardStore from "../stores/BoardStore";
 import replyStore from "../stores/ReplyStore";
 import threadStore from "../stores/ThreadStore";
 import siteStore from "../stores/SiteStore"
-import type { BoardData, ReplyData, SiteData, ThreadData } from "../../../../shared/types";
+import type { BoardData, PostData, SiteData} from "../../../../shared/types";
 
 export const api = {
-    siteId: "offline",
-    apiFetch: '/api/fetch/offline',
+    siteId: "",
+    apiFetch: '',
     updateSite(id: string) {
         const store = siteStore;
         console.log('update site')
@@ -22,10 +22,11 @@ export const api = {
 
     async fetchSites() {
         const store = siteStore;
-        console.log('fetch sites')
+        const url = '/api/sites';
+        console.log('fetch sites. url: ', url)
         store.setState({ error: null, loading: true })
         try {
-            const response = await fetch('/api/sites');
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
@@ -37,8 +38,7 @@ export const api = {
                 ),
                 order: Array.from(
                     sites.map(b => b.id)
-                ),
-                current: sites[0]
+                )
             })
 
         } catch (error) {
@@ -53,11 +53,12 @@ export const api = {
     },
     async fetchBoards() {
         const store = boardStore;
-        console.log('fetch boards')
+        const url = this.apiFetch + '/boards';
+        console.log('fetch boards. url: ', url)
         store.setState({ error: null, loading: true })
 
         try {
-            const response = await fetch(this.apiFetch + '/boards');
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
@@ -85,23 +86,24 @@ export const api = {
 
     async fetchThreads(boardId: string) {
         const store = threadStore;
-        console.log('fetch threads')
+        const url = `${this.apiFetch}/view/${boardId}`;
+        console.log('fetch threads. url: ',url)
         store.setState({ error: null, loading: true })
 
         try {
-            const response = await fetch(`${this.apiFetch}/view/${boardId}`);
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
 
             const data = await response.json();
-            const threads: ThreadData[] = data.threads;
+            const threads: PostData[] = data.threads;
 
             store.setState({
                 list: Object.fromEntries(
-                    threads.map(t => [t.id, t])
+                    threads.map(t => [t.meta.id, t])
                 ),
-                order: Array.from(threads.map(t => t.id))
+                order: Array.from(threads.map(t => t.meta.id))
             });
         } catch (error) {
             console.error('Error fetching threads:', error);
@@ -116,23 +118,24 @@ export const api = {
 
     async fetchReplies(boardId: string, threadId: number) {
         const store = replyStore;
-        console.log('fetch replies')
+        const url =`${this.apiFetch}/view/${boardId}/${threadId}`;
+        console.log('fetch replies. url: ', url)
         store.setState({ error: null, loading: true })
 
         try {
-            const response = await fetch(`${this.apiFetch}/view/${boardId}/${threadId}`);
+            const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText);
             }
 
             const data = await response.json();
-            const replies: ReplyData[] = data.replies;
-            store.setState(state => ({
+            const replies: PostData[] = data.replies;
+            store.setState({
                 boardId: boardId,
                 threadId: threadId,
-                list: Object.fromEntries(replies.map(r => [r.id, r])),
-                order: Array.from(replies.map(r => r.id))
-            }));
+                list: Object.fromEntries(replies.map(r => [r.meta.id, r])),
+                order: Array.from(replies.map(r => r.meta.id))
+            });
         } catch (error) {
             console.error('Error fetching replies:', error);
             if (error instanceof Error) {

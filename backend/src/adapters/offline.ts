@@ -1,4 +1,4 @@
-import { BoardData, MediaData, ReplyData, ThreadData } from "../../../shared/types";
+import { BoardData, MediaData, PostData, PostPart } from "../../../shared/types";
 import { Adapter } from "./types";
 export const offlineAdapter: Adapter = {
     url: 'offline',
@@ -13,7 +13,7 @@ export const offlineAdapter: Adapter = {
         });
     },
     async fetchThreads(boardId) {
-        return new Promise<ThreadData[]>(resolve =>
+        return new Promise<PostData[]>(resolve =>
             setTimeout(() => {
 
                 resolve(array(25).map(v => generateThread(boardId, v)))
@@ -36,23 +36,27 @@ function generateBoard(id: string): BoardData {
     return { id, name: `/${id}/`, nsfw: Math.random() > 0.5 }
 }
 
-function generateThread(boardId: string, id: number): ThreadData {
-    return {...generateReply(id, id), caption: ''}
+function generateThread(boardId: string, id: number): PostData {
+    return { ...generateReply(id, id), caption: '' }
 }
 
-function generateReply(threadId: number, id: number): ReplyData {
+function generateReply(threadId: number, id: number): PostData {
     return {
-        id,author: 'Anon', date: '01.02.2003', time: '12:34:56',
-        text: generateText(12),
-        media: array(4).map(v => generateMedia(v))
+        meta: {
+            id, author: 'Anon', date: '01.02.2003', time: '12:34:56',
+
+        },
+        content: [generateText(12)],
+        media: array(4).map(v => generateMedia(v)),
+        replies: []
     }
 }
 
-function generateText(length: number) {
+function generateText(length: number): PostPart {
     const pieces = ['A very long time ago, ', 'Hello everyoue', 'ADWADAWXADAWDASDWA', 'this week', 'generated text'];
     let result = '';
     array(length).forEach(v => result += choose(pieces) + ' ');
-    return result;
+    return {type: 'plainText', text: result};
 }
 
 function generateMedia(id: number): MediaData {

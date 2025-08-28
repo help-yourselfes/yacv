@@ -1,33 +1,39 @@
 //  >>/b/12345/12345
-type GlobalReply = {
+export type GlobalReply = {
+    type: 'globalReply'
     boardId: string;
     threadId: number;
     replyId: number;
 }
 
 //  >>12345678
-type LocalReply = {
+export type LocalReply = {
+    type: 'localReply'
     replyId: number;
 }
 
 // external link
-type ExtLink = {
+export type ExtLink = {
+    type: 'extLink'
     url: string;
 }
 
 // link to attached image
-type MediaLink = {
-    id: number;
+export type MediaLink = {
+    type: 'mediaLink'
+    media: MediaData;
     caption: string;
 }
 
-type PostPart = string | LocalReply | GlobalReply | ExtLink | MediaLink;
-
-export interface PostContent {
-    parts: PostPart[];
-
-    // not-today implementation
+export type PlainText = {
+    type:'plainText'
+    text: string;
 }
+
+type Reply = GlobalReply | LocalReply;
+
+
+export type PostPart = PlainText | Reply | ExtLink | MediaLink;
 
 export interface MediaData {
     id: number;
@@ -39,17 +45,17 @@ export interface MediaData {
     dimensions: { w: number, h: number };
 }
 
-export interface ReplyData {
-    id: number;
-    author: string;
-    date: string; // dd.mm.yyyy
-    time: string; // hh:mm:ss
-    text: string;
+export interface PostData {
     media: MediaData[];
-}
-
-export interface ThreadData extends ReplyData {
-    caption: string;
+    caption?: string;
+    content: PostPart[];
+    meta: {
+        id: number;     
+        author: string; 
+        date: string;   // dd.mm.yyyy
+        time: string;   // hh:mm:ss
+    },
+    replies: LocalReply[];
 }
 
 export interface BoardData {
