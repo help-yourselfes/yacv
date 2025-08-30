@@ -37,7 +37,7 @@ function generateBoard(id: string): BoardData {
 }
 
 function generateThread(boardId: string, id: number): PostData {
-    return { ...generateReply(id, id), caption: '' }
+    return { ...generateReply(id, id), caption: 'Caption' }
 }
 
 function generateReply(threadId: number, id: number): PostData {
@@ -46,8 +46,8 @@ function generateReply(threadId: number, id: number): PostData {
             id, author: 'Anon', date: '01.02.2003', time: '12:34:56',
 
         },
-        content: [generateText(12)],
-        media: array(4).map(v => generateMedia(v)),
+        content: [generateText(100)],
+        media: array(8).map(v => generateMedia(v)),
         replies: []
     }
 }
@@ -56,34 +56,48 @@ function generateText(length: number): PostPart {
     const pieces = ['A very long time ago, ', 'Hello everyoue', 'ADWADAWXADAWDASDWA', 'this week', 'generated text'];
     let result = '';
     array(length).forEach(v => result += choose(pieces) + ' ');
-    return {type: 'plainText', text: result};
+    return { type: 'plainText', text: result };
 }
 
 function generateMedia(id: number): MediaData {
-    const ext = choose(['png', 'jpeg', 'bmp']);
-    const name = choose(['cat', 'dog', 'image', 'picture', 'untitled']);
-
-    return {
-        id,
-        dimensions: { w: 128, h: 256 },
-        extention: ext,
-        name,
-        fullUrl: `/api/images/${name}.jpg`,
-        previewUrl: `/api/images/${name}s.jpg`,
-        timestamp: randInt(99999999)
-    }
+    return choose([
+        {
+            dimensions: {
+                w: 7680,
+                h: 4320
+            },
+            extention: 'jpg',
+            fullUrl: '/images/full/example.jpg',
+            id,
+            name: 'example',
+            previewUrl: '/images/preview/example.jpg',
+            timestamp: randInt(99999999)
+        },
+        {
+            dimensions: {
+                w: 1000,
+                h: 1000
+            },
+            extention: 'png',
+            fullUrl: '/images/full/image placeholder.png',
+            id,
+            name: 'image placeholder',
+            previewUrl: '/images/preview/image placeholder.jpg',
+            timestamp: randInt(99999999)
+        }
+    ])
 }
 
 function randInt(to: number) {
     return Math.floor(Math.random() * to)
 }
 
-function choose(arr: Array<any>) {
+function choose<T>(arr: Array<T>) {
     return arr[randInt(arr.length)]
 }
 
 function array(length: number) {
-    const arr = new Array(randInt(length));
+    const arr = new Array(randInt(length - 1) + 1);
     for (let i = 0; i < arr.length; i++) {
         arr[i] = i;
     }

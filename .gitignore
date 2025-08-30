@@ -24,6 +24,7 @@ Thumbs.db
 /backend/dist/
 /backend/.output/
 /backend/public/
+/cache/responses/
 
 # IDE
 .idea/
